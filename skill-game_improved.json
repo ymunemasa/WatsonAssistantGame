@@ -1,0 +1,305 @@
+{
+  "name": "game",
+  "intents": [
+    {
+      "intent": "playgame",
+      "examples": [
+        {
+          "text": "ゲームしよう"
+        },
+        {
+          "text": "遊んで"
+        },
+        {
+          "text": "遊ぼう"
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "entities": [
+    {
+      "entity": "action",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "kick",
+          "synonyms": [
+            "キック",
+            "きっく",
+            "蹴り",
+            "蹴る"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "guard",
+          "synonyms": [
+            "ガード",
+            "防御",
+            "守る",
+            "ぼうぎょ"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "punch",
+          "synonyms": [
+            "パンチ",
+            "殴る",
+            "突き"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "jump",
+          "synonyms": [
+            "ジャンプ",
+            "飛ぶ",
+            "回避",
+            "かいひ",
+            "じゃんぷ"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    }
+  ],
+  "language": "ja",
+  "metadata": {
+    "api_version": {
+      "major_version": "v1",
+      "minor_version": "2018-07-10"
+    }
+  },
+  "description": "",
+  "dialog_nodes": [
+    {
+      "type": "standard",
+      "title": "ガード",
+      "output": {
+        "text": {
+          "values": [
+            "ガードに失敗！3ダメージ！自HP <? $my_hp = $my_hp - 3 ?>",
+            "ガードに成功！しかし若干腕がしびれて1ダメージ！自HP <? $my_hp = $my_hp - 1 ?>",
+            "カウンターに成功！敵に5ダメージ！敵HP <? $enemy_hp = $enemy_hp - 5 ?>"
+          ],
+          "selection_policy": "random"
+        }
+      },
+      "parent": "node_10_1542532424310",
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "condition",
+        "dialog_node": "node_4_1542525852635"
+      },
+      "conditions": "@action:guard",
+      "dialog_node": "node_1_1542609311329",
+      "previous_sibling": "node_7_1542526882992"
+    },
+    {
+      "type": "standard",
+      "title": "ジャンプ",
+      "output": {
+        "text": {
+          "values": [
+            "ジャンプして敵の攻撃の回避に成功！自HP <? $my_hp ?>",
+            "体制を崩してしまいジャンプできずに敵の攻撃を受けてしまう。5ダメージ！自HP <? $my_hp = $my_hp - 5 ?>"
+          ],
+          "selection_policy": "random"
+        }
+      },
+      "parent": "node_10_1542532424310",
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "condition",
+        "dialog_node": "node_4_1542525852635"
+      },
+      "conditions": "@action:jump",
+      "dialog_node": "node_2_1542609600921",
+      "previous_sibling": "node_1_1542609311329"
+    },
+    {
+      "type": "standard",
+      "title": "パンチ",
+      "output": {
+        "text": {
+          "values": [
+            "あなたのパンチ！敵に 5ダメージ！敵HP <? $enemy_hp = $enemy_hp - 5 ?>",
+            "パンチを繰り出すも力が入っていなかった。敵に1ダメージ！敵HP <? $enemy_hp = $enemy_hp - 1 ?>",
+            "クロスカウンターを受けてしまった！7ダメージを受けた！自HP <? $my_hp = $my_hp - 7 ?>"
+          ],
+          "selection_policy": "random"
+        }
+      },
+      "parent": "node_10_1542532424310",
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "condition",
+        "dialog_node": "node_4_1542525852635"
+      },
+      "conditions": "@action:punch",
+      "dialog_node": "node_7_1542526882992",
+      "previous_sibling": "node_2_1542525401881"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "text": {
+          "values": [
+            "指示が分かりませんでした…。もう一度お願いします。"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "node_10_1542532424310",
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "condition",
+        "dialog_node": "node_4_1542525852635"
+      },
+      "conditions": "anything_else",
+      "dialog_node": "node_8_1542527983048",
+      "previous_sibling": "node_2_1542609600921"
+    },
+    {
+      "type": "standard",
+      "title": "キック",
+      "output": {
+        "text": {
+          "values": [
+            "あなたのキック！相手は回避できずに 2 ダメージ！敵HP <? $enemy_hp = $enemy_hp - 2 ?>",
+            "あなたのキック！クリーンヒット！5ダメージ！敵HP <? $enemy_hp = $enemy_hp - 5 ?>",
+            "あなたのキック！相手はひらりとかわした！敵HP <? $enemy_hp ?>",
+            "あなたのキック！反撃を受けてしまい、5ダメージ受けてしまった！自HP <? $my_hp  = $my_hp - 5 ?>"
+          ],
+          "selection_policy": "random"
+        }
+      },
+      "parent": "node_10_1542532424310",
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "condition",
+        "dialog_node": "node_4_1542525852635"
+      },
+      "conditions": "@action:kick",
+      "dialog_node": "node_2_1542525401881"
+    },
+    {
+      "type": "standard",
+      "title": "バトル継続",
+      "output": {
+        "text": {
+          "values": [
+            "パンチ、キック、ジャンプ、ガードをすることができます。何をしますか？"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "node_1_1542524989270",
+      "metadata": {},
+      "conditions": "$my_hp>0",
+      "dialog_node": "node_10_1542532424310",
+      "previous_sibling": "node_6_1542526567402"
+    },
+    {
+      "type": "standard",
+      "title": "you down",
+      "output": {
+        "text": {
+          "values": [
+            "あなたは負けました。"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "node_1_1542524989270",
+      "metadata": {},
+      "conditions": "$my_hp<=0",
+      "dialog_node": "node_6_1542526567402",
+      "previous_sibling": "node_4_1542525852635"
+    },
+    {
+      "type": "standard",
+      "title": "enemy down",
+      "output": {
+        "text": {
+          "values": [
+            "やった！敵を倒した！お疲れ様でした。"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "node_1_1542524989270",
+      "metadata": {},
+      "conditions": "$enemy_hp<=0",
+      "dialog_node": "node_4_1542525852635"
+    },
+    {
+      "type": "standard",
+      "title": "その他",
+      "output": {
+        "text": {
+          "values": [
+            "解釈できませんでした。申し訳ありませんが違う表現を試していただけますか。",
+            "恐れ入りますが表現を変えていただけますか。解釈できませんでした。"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "その他",
+      "previous_sibling": "node_1_1542524989270"
+    },
+    {
+      "type": "standard",
+      "title": "ゲーム開始",
+      "output": {
+        "text": {
+          "values": [
+            "格闘ゲームしましょう。"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "context": {
+        "my_hp": 20,
+        "enemy_hp": 20
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "condition",
+        "dialog_node": "node_4_1542525852635"
+      },
+      "conditions": "#playgame",
+      "dialog_node": "node_1_1542524989270",
+      "previous_sibling": "ようこそ"
+    },
+    {
+      "type": "standard",
+      "title": "ようこそ",
+      "output": {
+        "text": {
+          "values": [
+            "いらっしゃいませ。ご用件を入力してください。"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "metadata": {},
+      "conditions": "welcome",
+      "dialog_node": "ようこそ"
+    }
+  ],
+  "workspace_id": "3e2b6383-3971-4aa3-9269-d207e74342b7",
+  "counterexamples": [],
+  "learning_opt_out": false,
+  "status": "Available"
+}
